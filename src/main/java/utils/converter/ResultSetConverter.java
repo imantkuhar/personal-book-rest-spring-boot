@@ -26,6 +26,7 @@ public class ResultSetConverter {
                 String phoneNumber = resultSet.getString("phoneNumber");
                 String address = resultSet.getString("address");
                 String group = resultSet.getString("groups");
+                String date = resultSet.getString("date");
 
                 Contact contact = new Contact();
                 contact.setId(id);
@@ -33,16 +34,8 @@ public class ResultSetConverter {
                 contact.setPhoneNumber(phoneNumber);
                 contact.setAddress(address);
                 contact.setGroup(group);
+                contact.setDate(date);
 
-                try {
-                    String DATE_TIME_FORMAT = PropertiesHolder.getProperty("DATE_TIME_FORMAT");
-                    DateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
-                    String dateFromDB = resultSet.getString("date");
-                    Date formattedDate = dateFormat.parse(dateFromDB);
-                    contact.setDate(formattedDate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
                 contactList.add(contact);
             }
         return contactList;

@@ -16,7 +16,7 @@ public class ContactServiceImpl implements ContactService {
 
     private ContactDao contactDao = new ContactDao();
 
-    public boolean addContact(Contact contact) {
+    public Contact addContact(Contact contact) {
         return contactDao.addContact(contact);
     }
 
@@ -24,17 +24,11 @@ public class ContactServiceImpl implements ContactService {
         return contactDao.deleteContact(id);
     }
 
-    public boolean updateContact(Contact contact) {
+    public Contact updateContact(Contact contact) {
         return contactDao.updateContact(contact);
     }
 
     public List<Contact> getAllContacts() {
         return contactDao.getAllContacts();
-//        List<Contact> contacts = new ArrayList<>();
-//        contacts.add(new Contact("Name", "2520515", "address", "group"));
-//        contacts.add(new Contact("Name", "2520515", "address", "group"));
-//        contacts.add(new Contact("Name", "2520515", "address", "group"));
-//        contacts.add(new Contact("Name", "2520515", "address", "group"));
-//        return contacts;
      }
 }

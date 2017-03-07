@@ -25,7 +25,7 @@ public class ContactDao {
     public static final String ADD_CONTACT_PREPARED_STATEMENT = "INSERT INTO CONTACT (name, phoneNumber, address, groups, date)" +
             " VALUES (?, ?, ?, ?, ?)";
 
-    public static final String GET_CONTACT_ID_PREPARED_STATEMENT = "SELECT id FROM CONTACT ORDER BY id DESC LIMIT 1";
+    public static final String GET_CONTACT_ID_PREPARED_STATEMENT = "SELECT id, date FROM CONTACT ORDER BY id DESC LIMIT 1";
 
     public static final String DELETE_CONTACT_PREPARED_STATEMENT = "DELETE FROM CONTACT WHERE id = ?";
 
@@ -50,7 +50,7 @@ public class ContactDao {
         }
     }
 
-    public boolean addContact(Contact contact) {
+    public Contact addContact(Contact contact) {
         String name = contact.getName();
         String phoneNumber = contact.getPhoneNumber();
         String address = contact.getAddress();
@@ -60,25 +60,27 @@ public class ContactDao {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
         LocalDateTime dateTime = LocalDateTime.now();
         String formattedDateTime = dateTime.format(formatter);
-        try (Connection connection = ConnectionService.createConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(ADD_CONTACT_PREPARED_STATEMENT);
-             PreparedStatement preparedStatement2 = connection.prepareStatement(GET_CONTACT_ID_PREPARED_STATEMENT)){
 
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, phoneNumber);
-            preparedStatement.setString(3, address);
-            preparedStatement.setString(4, group);
-            preparedStatement.setString(5, formattedDateTime);
-            preparedStatement.execute();
+        try (Connection connection = ConnectionService.createConnection();
+             PreparedStatement preparedStatement1 = connection.prepareStatement(ADD_CONTACT_PREPARED_STATEMENT);
+             PreparedStatement preparedStatement2 = connection.prepareStatement(GET_CONTACT_ID_PREPARED_STATEMENT)) {
+
+            preparedStatement1.setString(1, name);
+            preparedStatement1.setString(2, phoneNumber);
+            preparedStatement1.setString(3, address);
+            preparedStatement1.setString(4, group);
+            preparedStatement1.setString(5, formattedDateTime);
+            preparedStatement1.execute();
 
             ResultSet resultSet = preparedStatement2.executeQuery();
             String contactId = resultSet.getString("id");
+            String contactDate = resultSet.getString("date");
             contact.setId(Integer.parseInt(contactId));
-            return true;
+            contact.setDate(contactDate);
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return contact;
     }
 
     public boolean deleteContact(int id) {
@@ -93,7 +95,7 @@ public class ContactDao {
         }
     }
 
-    public boolean updateContact(Contact contact) {
+    public Contact updateContact(Contact contact) {
         int id = contact.getId();
         String name = contact.getName();
         String phoneNumber = contact.getPhoneNumber();
@@ -107,13 +109,13 @@ public class ContactDao {
             preparedStatement.setString(3, address);
             preparedStatement.setString(4, group);
             preparedStatement.setInt(5, id);
-            preparedStatement.execute();
-
-            return true;
+            if (preparedStatement.execute()) {
+                return contact;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return new Contact();
     }
 
     public List<Contact> getAllContacts() {

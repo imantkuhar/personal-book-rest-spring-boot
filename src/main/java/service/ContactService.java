@@ -9,11 +9,11 @@ import java.util.List;
  */
 public interface ContactService {
 
-    boolean addContact(Contact contact);
+    Contact addContact(Contact contact);
 
     boolean deleteContactById(int id);
 
-    boolean updateContact(Contact contact);
+    Contact updateContact(Contact contact);
 
     List<Contact> getAllContacts();
 }
