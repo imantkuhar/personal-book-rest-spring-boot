@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * Created by Imant on 14.11.16.
+ * Provides methods that allow you to interact with SQLite DB
  */
 
 public class ContactDao {
@@ -42,7 +42,11 @@ public class ContactDao {
         createContactTable();
     }
 
-
+    /**
+     * Create table for contacts
+     *
+     * @return true if table is created and false if not
+     */
     public boolean createContactTable() {
         try (Connection connection = ConnectionService.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_TABLE_CONTACT_PREPARED_STATEMENT)) {
@@ -56,6 +60,13 @@ public class ContactDao {
         }
     }
 
+
+    /**
+     * Returns added contact
+     *
+     * @param contact contact you want to save
+     * @return instance of Contact
+     */
     public Contact addContact(Contact contact) {
         String name = contact.getName();
         String phoneNumber = contact.getPhoneNumber();
@@ -91,6 +102,12 @@ public class ContactDao {
         return contact;
     }
 
+    /**
+     * Returns a boolean value
+     *
+     * @param id id of contact you want to delete
+     * @return true if contact is deleted and false if not
+     */
     public boolean deleteContact(int id) {
         try (Connection connection = ConnectionService.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CONTACT_PREPARED_STATEMENT)) {
@@ -105,6 +122,12 @@ public class ContactDao {
         }
     }
 
+    /**
+     * Returns updated contact
+     *
+     * @param contact contact you want to update
+     * @return updated contact
+     */
     public Contact updateContact(Contact contact) {
         int id = contact.getId();
         String name = contact.getName();
@@ -130,6 +153,11 @@ public class ContactDao {
         return new Contact();
     }
 
+    /**
+     * Returns all contacts
+     *
+     * @return list of contacts
+     */
     public List<Contact> getAllContacts() {
         List<Contact> contactList = null;
         try (Connection connection = ConnectionService.createConnection();

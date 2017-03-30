@@ -1,16 +1,38 @@
 package model;
 
-import java.util.Date;
-
 /**
  * Created by Imant on 27.02.17.
  */
 public class Contact {
+
+    /**
+     * contact's id
+     */
     private int id;
+
+    /**
+     * contact's name or login
+     */
     private String name;
+
+    /**
+     * contact's phone number
+     */
     private String phoneNumber;
+
+    /**
+     * contact's address
+     */
     private String address;
+
+    /**
+     * contact's group
+     */
     private String group;
+
+    /**
+     * date of adding to PersonalBook
+     */
     private String date;
 
     public Contact() {

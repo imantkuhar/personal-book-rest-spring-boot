@@ -10,7 +10,8 @@ import service.ContactServiceImpl;
 import java.util.List;
 
 /**
- * Created by Imant on 27.02.17.
+ * Provides methods which allow user doing
+ * actions on the chat page.
  */
 
 @RestController
@@ -20,6 +21,12 @@ public class ContactController {
 
     private ContactServiceImpl contactService = new ContactServiceImpl();
 
+    /**
+     * Calls when user moves to main view
+     * Feed the contact table in main view
+     *
+     * @return ResponseEntity
+     */
     @RequestMapping(value = "/contacts", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<Contact>> getAllContacts() {
         List<Contact> contacts = contactService.getAllContacts();
@@ -30,6 +37,12 @@ public class ContactController {
         return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
     }
 
+    /**
+     * Calls when user wants to save new contact
+     * at the add contact view
+     *
+     * @return ResponseEntity
+     */
     @RequestMapping(value = "/contacts", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<Contact> addContact(@RequestBody Contact contact) {
         Contact addedContact = contactService.addContact(contact);
@@ -39,6 +52,12 @@ public class ContactController {
         return new ResponseEntity<Contact>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Calls when user wants to update contact
+     * at the update contact view
+     *
+     * @return ResponseEntity
+     */
     @RequestMapping(value = "/contacts/{id}", method = RequestMethod.PUT, consumes = "application/json")
     public ResponseEntity<Contact> updateContact(@RequestBody Contact contact, @PathVariable("id") int id) {
         Contact updatedContact = contactService.updateContact(contact);
@@ -48,6 +67,12 @@ public class ContactController {
         return new ResponseEntity<Contact>(HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Calls when user wants to delete contact
+     * at the main view
+     *
+     * @return ResponseEntity
+     */
     @RequestMapping(value = "/contacts/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteContactById(@PathVariable("id") int id) {
         if (contactService.deleteContactById(id)) {

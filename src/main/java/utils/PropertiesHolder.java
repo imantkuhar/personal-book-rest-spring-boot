@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Created by Imant on 30.10.16.
+ * Represents method which help you work with constants
  */
 public class PropertiesHolder {
 
@@ -21,6 +21,12 @@ public class PropertiesHolder {
         return properties;
     }
 
+    /**
+     * Return the value from resources by key
+     *
+     * @param key key for value
+     * @return the value by key
+     */
     public static String getProperty(String key) {
         return PROPERTIES.getProperty(key);
     }

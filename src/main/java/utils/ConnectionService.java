@@ -6,12 +6,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 /**
- * Created by Imant on 28.11.16.
+ * Represents method which create connection to DB
  */
 public class ConnectionService {
 
     private final static Logger logger = Logger.getLogger(ConnectionService.class);
 
+    /**
+     * Create the connection to DB
+     *
+     * @return the connection
+     */
     public static Connection createConnection() {
         Connection connection = null;
 
