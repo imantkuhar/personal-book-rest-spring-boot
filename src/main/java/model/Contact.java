@@ -86,4 +86,8 @@ public class Contact {
         return "" + name + " " + phoneNumber + " " + address + " " + group + "";
     }
 
+    public String toStringForLog() {
+        return "" + name + " " + phoneNumber + " " + address + " " + group + "";
+    }
+
 }

@@ -1,6 +1,8 @@
 package db;
 
 import model.Contact;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import utils.ConnectionService;
 import utils.PropertiesHolder;
 import utils.converter.ResultSetConverter;
@@ -18,6 +20,8 @@ import java.util.List;
  */
 
 public class ContactDao {
+
+    private final static Logger logger = Logger.getLogger(ContactDao.class);
 
     public static final String CREATE_TABLE_CONTACT_PREPARED_STATEMENT = "CREATE TABLE IF NOT EXISTS CONTACT (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             " name VARCHAR(30), phoneNumber VARCHAR(10), address VARCHAR(15), groups VARCHAR(15), date VARCHAR (25))";
@@ -43,9 +47,11 @@ public class ContactDao {
         try (Connection connection = ConnectionService.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_TABLE_CONTACT_PREPARED_STATEMENT)) {
             preparedStatement.execute();
+            logger.info("Contact Table is created.");
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.log(Level.ERROR, "Exception", e);
             return false;
         }
     }
@@ -77,8 +83,10 @@ public class ContactDao {
             String contactDate = resultSet.getString("date");
             contact.setId(Integer.parseInt(contactId));
             contact.setDate(contactDate);
+            logger.info("Contact : [" + contact.toStringForLog() + "] is saved in DB.");
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.log(Level.ERROR, "Exception", e);
         }
         return contact;
     }
@@ -88,9 +96,11 @@ public class ContactDao {
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CONTACT_PREPARED_STATEMENT)) {
             preparedStatement.setInt(1, id);
             preparedStatement.execute();
+            logger.info("Contact is deleted from DB.");
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.log(Level.ERROR, "Exception", e);
             return false;
         }
     }
@@ -110,10 +120,12 @@ public class ContactDao {
             preparedStatement.setString(4, group);
             preparedStatement.setInt(5, id);
             if (preparedStatement.execute()) {
+                logger.info("Contact : [" + contact.toStringForLog() + "] is updated in DB.");
                 return contact;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.log(Level.ERROR, "Exception", e);
         }
         return new Contact();
     }
@@ -124,8 +136,10 @@ public class ContactDao {
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_CONTACTS_PREPARED_STATEMENT)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             contactList = ResultSetConverter.convertResultSetToContactList(resultSet);
+            logger.info("List of contacts has been gotten from DB.");
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.log(Level.ERROR, "Exception", e);
         }
         return contactList;
     }
